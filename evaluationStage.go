@@ -47,6 +47,12 @@ var (
 	_false = interface{}(false)
 )
 
+const precisionDigit = 10
+
+func roundToDigit(value float64) float64 {
+	return math.Round((value * math.Pow(10, precisionDigit))) / math.Pow(10, precisionDigit)
+}
+
 func (this *evaluationStage) swapWith(other *evaluationStage) {
 
 	temp := *other
@@ -114,30 +120,48 @@ func gteStage(left interface{}, right interface{}, parameters Parameters) (inter
 	if isString(left) && isString(right) {
 		return boolIface(left.(string) >= right.(string)), nil
 	}
-	return boolIface(left.(float64) >= right.(float64)), nil
+	leftFloat := roundToDigit(left.(float64))
+	rightFloat := roundToDigit(right.(float64))
+	return boolIface(leftFloat >= rightFloat), nil
 }
 func gtStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
 	if isString(left) && isString(right) {
 		return boolIface(left.(string) > right.(string)), nil
 	}
-	return boolIface(left.(float64) > right.(float64)), nil
+	leftFloat := roundToDigit(left.(float64))
+	rightFloat := roundToDigit(right.(float64))
+	return boolIface(leftFloat > rightFloat), nil
 }
 func lteStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
 	if isString(left) && isString(right) {
 		return boolIface(left.(string) <= right.(string)), nil
 	}
-	return boolIface(left.(float64) <= right.(float64)), nil
+	leftFloat := roundToDigit(left.(float64))
+	rightFloat := roundToDigit(right.(float64))
+	return boolIface(leftFloat <= rightFloat), nil
 }
 func ltStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
 	if isString(left) && isString(right) {
 		return boolIface(left.(string) < right.(string)), nil
 	}
-	return boolIface(left.(float64) < right.(float64)), nil
+	leftFloat := roundToDigit(left.(float64))
+	rightFloat := roundToDigit(right.(float64))
+	return boolIface(leftFloat < rightFloat), nil
 }
 func equalStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
+	if isFloat64(left) && isFloat64(right) {
+		leftFloat := roundToDigit(left.(float64))
+		rightFloat := roundToDigit(right.(float64))
+		return boolIface(reflect.DeepEqual(leftFloat, rightFloat)), nil
+	}
 	return boolIface(reflect.DeepEqual(left, right)), nil
 }
 func notEqualStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
+	if isFloat64(left) && isFloat64(right) {
+		leftFloat := roundToDigit(left.(float64))
+		rightFloat := roundToDigit(right.(float64))
+		return boolIface(reflect.DeepEqual(leftFloat, rightFloat)), nil
+	}
 	return boolIface(!reflect.DeepEqual(left, right)), nil
 }
 func andStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
