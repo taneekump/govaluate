@@ -47,7 +47,7 @@ var (
 	_false = interface{}(false)
 )
 
-const precisionDigit = 10
+const precisionDigit = 4
 
 func roundToDigit(value float64) float64 {
 	return math.Round((value * math.Pow(10, precisionDigit))) / math.Pow(10, precisionDigit)
