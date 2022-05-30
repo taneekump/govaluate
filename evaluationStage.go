@@ -110,7 +110,7 @@ func multiplyStage(left interface{}, right interface{}, parameters Parameters) (
 func divideStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
 	// hard coded for work around
 	if right.(float64) == 0 {
-		return 0, nil
+		return float64(0), nil
 	}
 	return left.(float64) / right.(float64), nil
 }
