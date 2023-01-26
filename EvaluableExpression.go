@@ -46,41 +46,65 @@ Returns an error if the given expression has invalid syntax.
 func NewEvaluableExpression(expression string) (*EvaluableExpression, error) {
 
 	functions := map[string]ExpressionFunction{
-		"min": func(args ...interface{}) (interface{}, error) {
+		"min": func(args ...interface{}) (result interface{}, err error) {
 			if len(args) == 0 {
 				return "", fmt.Errorf("Cannot find minimum of empty list")
 			}
-			result := math.Inf(0)
+			result = math.Inf(0)
 			for _, arg := range args {
+				value := result.(float64)
 				switch arg.(type) {
 				case string:
+					value, err = strconv.ParseFloat(arg.(string), 64)
+					if err != nil {
+						return "", err
+					}
+				case float64:
+					//do nothing
+				case float32:
+					value = float64(arg.(float32))
+				case int:
+					value = float64(arg.(int))
+				case int32:
+					value = float64(arg.(int32))
+				case int64:
+					value = float64(arg.(int64))
 				default:
 					return "", fmt.Errorf("Wrong argument type to minimum function")
 				}
-				value, err := strconv.ParseFloat(arg.(string), 64)
-				if err != nil {
-					return "", err
-				}
-				result = math.Min(result, value)
+
+				result = math.Min(result.(float64), value)
 			}
 			return fmt.Sprintf("%v", result), nil
 		},
-		"max": func(args ...interface{}) (interface{}, error) {
+		"max": func(args ...interface{}) (result interface{}, err error) {
 			if len(args) == 0 {
 				return "", fmt.Errorf("Cannot find minimum of empty list")
 			}
-			result := math.Inf(-1)
+			result = math.Inf(-1)
 			for _, arg := range args {
+				value := result.(float64)
 				switch arg.(type) {
 				case string:
+					value, err = strconv.ParseFloat(arg.(string), 64)
+					if err != nil {
+						return "", err
+					}
+				case float64:
+					//do nothing
+				case float32:
+					value = float64(arg.(float32))
+				case int:
+					value = float64(arg.(int))
+				case int32:
+					value = float64(arg.(int32))
+				case int64:
+					value = float64(arg.(int64))
 				default:
 					return "", fmt.Errorf("Wrong argument type to minimum function")
 				}
-				value, err := strconv.ParseFloat(arg.(string), 64)
-				if err != nil {
-					return "", err
-				}
-				result = math.Max(result, value)
+
+				result = math.Max(result.(float64), value)
 			}
 			return fmt.Sprintf("%v", result), nil
 		},
