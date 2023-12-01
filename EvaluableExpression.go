@@ -60,7 +60,7 @@ func NewEvaluableExpression(expression string) (*EvaluableExpression, error) {
 						return "", err
 					}
 				case float64:
-					//do nothing
+					value = arg.(float64)
 				case float32:
 					value = float64(arg.(float32))
 				case int:
@@ -91,7 +91,7 @@ func NewEvaluableExpression(expression string) (*EvaluableExpression, error) {
 						return "", err
 					}
 				case float64:
-					//do nothing
+					value = arg.(float64)
 				case float32:
 					value = float64(arg.(float32))
 				case int:
