@@ -75,7 +75,7 @@ func NewEvaluableExpression(expression string) (*EvaluableExpression, error) {
 
 				result = math.Min(result.(float64), value)
 			}
-			return fmt.Sprintf("%v", result), nil
+			return result, nil
 		},
 		"max": func(args ...interface{}) (result interface{}, err error) {
 			if len(args) == 0 {
@@ -106,7 +106,7 @@ func NewEvaluableExpression(expression string) (*EvaluableExpression, error) {
 
 				result = math.Max(result.(float64), value)
 			}
-			return fmt.Sprintf("%v", result), nil
+			return result, nil
 		},
 	}
 	return NewEvaluableExpressionWithFunctions(expression, functions)
