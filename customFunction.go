@@ -40,17 +40,17 @@ func castToDateType(dateString string) (dateType, error) {
 	if len(splittedDate) != 3 {
 		return dateType{}, fmt.Errorf("datepart: %s is incorrect format (yyyy-mm-dd hh:mm:ss or yyyy-mm-dd)", dateString)
 	}
-	year, err := strconv.Atoi(splittedDate[0])
+	year, err := strconv.Atoi(strings.ReplaceAll(splittedDate[0], "\"", ""))
 	if err != nil {
-		return dateType{}, fmt.Errorf("datepart: data type’s input field is not date/datetime at year")
+		return dateType{}, fmt.Errorf("data type’s input field is not date/datetime at year")
 	}
-	month, err := strconv.Atoi(splittedDate[1])
+	month, err := strconv.Atoi(strings.ReplaceAll(splittedDate[1], "\"", ""))
 	if err != nil {
-		return dateType{}, fmt.Errorf("datepart: data type’s input field is not date/datetime at month")
+		return dateType{}, fmt.Errorf("data type’s input field is not date/datetime at month")
 	}
-	day, err := strconv.Atoi(splittedDate[2])
+	day, err := strconv.Atoi(strings.ReplaceAll(splittedDate[2], "\"", ""))
 	if err != nil && len(splittedDate[2]) > 2 {
-		return dateType{}, fmt.Errorf("datepart: data type’s input field is not date/datetime at day")
+		return dateType{}, fmt.Errorf("data type’s input field is not date/datetime at day")
 	}
 
 	if len(datetimeSplitted) > 1 {
@@ -61,15 +61,15 @@ func castToDateType(dateString string) (dateType, error) {
 		}
 		hour, err = strconv.Atoi(splittedTime[0])
 		if err != nil {
-			return dateType{}, fmt.Errorf("datepart: data type’s input field is not date/datetime at hour")
+			return dateType{}, fmt.Errorf("data type’s input field is not date/datetime at hour")
 		}
 		minute, err = strconv.Atoi(splittedTime[1])
 		if err != nil {
-			return dateType{}, fmt.Errorf("datepart: data type’s input field is not date/datetime at minute")
+			return dateType{}, fmt.Errorf("data type’s input field is not date/datetime at minute")
 		}
 		second, err = strconv.Atoi(splittedTime[2])
 		if err != nil {
-			return dateType{}, fmt.Errorf("datepart: data type’s input field is not date/datetime at second")
+			return dateType{}, fmt.Errorf("data type’s input field is not date/datetime at second")
 		}
 	}
 
