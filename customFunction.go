@@ -30,6 +30,22 @@ func castDateTypeToString(date dateType) string {
 	return result
 }
 
+func castTimeStampToDateType(timestamp int64) (dateType, error) {
+	bangkok, err := time.LoadLocation("Asia/Bangkok")
+	timeInstance := time.Unix(timestamp, 0).In(bangkok)
+	if err != nil {
+		return dateType{}, err
+	}
+	return dateType{
+		year:   timeInstance.Year(),
+		month:  int(timeInstance.Month()),
+		day:    timeInstance.Day(),
+		hour:   timeInstance.Hour(),
+		minute: timeInstance.Minute(),
+		second: timeInstance.Second(),
+	}, nil
+}
+
 func castToDateType(dateString string) (dateType, error) {
 	datetimeSplitted := strings.Split(dateString, " ")
 	splittedDate := strings.Split(datetimeSplitted[0], "-")
@@ -162,6 +178,11 @@ var dateDiffFunction = func(args ...interface{}) (result interface{}, err error)
 		if err != nil {
 			return nil, err
 		}
+	case int64:
+		date1, err = castTimeStampToDateType(tmp)
+		if err != nil {
+			return nil, err
+		}
 	default:
 		return "", fmt.Errorf("wrong first argument type to datediff")
 	}
@@ -169,6 +190,11 @@ var dateDiffFunction = func(args ...interface{}) (result interface{}, err error)
 	switch tmp := args[1].(type) {
 	case string:
 		date2, err = castToDateType(tmp)
+		if err != nil {
+			return nil, err
+		}
+	case int64:
+		date1, err = castTimeStampToDateType(tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -223,6 +249,11 @@ var dateAddFunction = func(args ...interface{}) (result interface{}, err error) 
 	switch tmp := args[0].(type) {
 	case string:
 		dateInput, err = castToDateType(tmp)
+		if err != nil {
+			return nil, err
+		}
+	case int64:
+		dateInput, err = castTimeStampToDateType(tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -281,6 +312,11 @@ var datePartFunction = func(args ...interface{}) (result interface{}, err error)
 	switch tmp := args[0].(type) {
 	case string:
 		dateInput, err = castToDateType(tmp)
+		if err != nil {
+			return nil, err
+		}
+	case int64:
+		dateInput, err = castTimeStampToDateType(tmp)
 		if err != nil {
 			return nil, err
 		}
