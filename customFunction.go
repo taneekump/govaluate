@@ -178,6 +178,11 @@ var dateDiffFunction = func(args ...interface{}) (result interface{}, err error)
 		if err != nil {
 			return nil, err
 		}
+	case float64:
+		date1, err = castTimeStampToDateType(int64(tmp))
+		if err != nil {
+			return nil, err
+		}
 	case int64:
 		date1, err = castTimeStampToDateType(tmp)
 		if err != nil {
@@ -193,8 +198,13 @@ var dateDiffFunction = func(args ...interface{}) (result interface{}, err error)
 		if err != nil {
 			return nil, err
 		}
+	case float64:
+		date2, err = castTimeStampToDateType(int64(tmp))
+		if err != nil {
+			return nil, err
+		}
 	case int64:
-		date1, err = castTimeStampToDateType(tmp)
+		date2, err = castTimeStampToDateType(tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -249,6 +259,11 @@ var dateAddFunction = func(args ...interface{}) (result interface{}, err error) 
 	switch tmp := args[0].(type) {
 	case string:
 		dateInput, err = castToDateType(tmp)
+		if err != nil {
+			return nil, err
+		}
+	case float64:
+		dateInput, err = castTimeStampToDateType(int64(tmp))
 		if err != nil {
 			return nil, err
 		}
@@ -312,6 +327,11 @@ var datePartFunction = func(args ...interface{}) (result interface{}, err error)
 	switch tmp := args[0].(type) {
 	case string:
 		dateInput, err = castToDateType(tmp)
+		if err != nil {
+			return nil, err
+		}
+	case float64:
+		dateInput, err = castTimeStampToDateType(int64(tmp))
 		if err != nil {
 			return nil, err
 		}
