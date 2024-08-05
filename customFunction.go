@@ -130,7 +130,7 @@ var minCustomFunction = func(args ...interface{}) (result interface{}, err error
 
 		result = math.Min(result.(float64), value)
 	}
-	return fmt.Sprintf("%v", result), nil
+	return result, nil
 }
 
 var maxCustomFunction = func(args ...interface{}) (result interface{}, err error) {
@@ -162,7 +162,7 @@ var maxCustomFunction = func(args ...interface{}) (result interface{}, err error
 
 		result = math.Max(result.(float64), value)
 	}
-	return fmt.Sprintf("%v", result), nil
+	return result, nil
 }
 
 var dateDiffFunction = func(args ...interface{}) (result interface{}, err error) {
@@ -244,7 +244,7 @@ var dateDiffFunction = func(args ...interface{}) (result interface{}, err error)
 		minEpoch2 := time.Date(minDate.year, time.Month(minDate.month), minDate.day, 0, 0, 0, 0, time.UTC)
 		valueInt = int(maxEpoch.Sub(minEpoch2).Hours() / 24)
 	}
-	result = strconv.FormatInt(int64(valueInt), 10)
+	result = float64(valueInt)
 	return result, nil
 }
 
@@ -353,20 +353,20 @@ var datePartFunction = func(args ...interface{}) (result interface{}, err error)
 
 	switch mode {
 	case "date":
-		result = fmt.Sprintf("%d", dateInput.day)
+		result = float64(dateInput.day)
 	case "day": // day of week
 		instance := time.Date(dateInput.year, time.Month(dateInput.month), dateInput.day, 0, 0, 0, 0, time.Local)
-		result = fmt.Sprintf("%d", instance.Weekday()+1)
+		result = float64(instance.Weekday() + 1)
 	case "month":
-		result = fmt.Sprintf("%d", dateInput.month)
+		result = float64(dateInput.month)
 	case "year":
-		result = fmt.Sprintf("%d", dateInput.year)
+		result = float64(dateInput.year)
 	case "hour":
-		result = fmt.Sprintf("%d", dateInput.hour)
+		result = float64(dateInput.hour)
 	case "minute":
-		result = fmt.Sprintf("%d", dateInput.minute)
+		result = float64(dateInput.minute)
 	case "second":
-		result = fmt.Sprintf("%d", dateInput.second) // panic(createSyntaxErrorMessage("Unimplemented mode for datepart, since there is no time in value", formula))
+		result = float64(dateInput.second) // panic(createSyntaxErrorMessage("Unimplemented mode for datepart, since there is no time in value", formula))
 	default:
 		return "", fmt.Errorf("unrecognized mode to datepart")
 	}
