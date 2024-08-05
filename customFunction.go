@@ -244,7 +244,7 @@ var dateDiffFunction = func(args ...interface{}) (result interface{}, err error)
 		minEpoch2 := time.Date(minDate.year, time.Month(minDate.month), minDate.day, 0, 0, 0, 0, time.UTC)
 		valueInt = int(maxEpoch.Sub(minEpoch2).Hours() / 24)
 	}
-	result = fmt.Sprintf("(%s)", strconv.FormatInt(int64(valueInt), 10))
+	result = strconv.FormatInt(int64(valueInt), 10)
 	return result, nil
 }
 
