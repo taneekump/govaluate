@@ -54,7 +54,7 @@ func castToDateType(dateString string) (dateType, error) {
 	second := 0
 
 	if len(splittedDate) != 3 {
-		return dateType{}, fmt.Errorf("datepart: %s is incorrect format (yyyy-mm-dd hh:mm:ss or yyyy-mm-dd)", dateString)
+		return dateType{}, fmt.Errorf("cast data type: %s is incorrect format (yyyy-mm-dd hh:mm:ss or yyyy-mm-dd)", dateString)
 	}
 	year, err := strconv.Atoi(strings.ReplaceAll(splittedDate[0], "\"", ""))
 	if err != nil {
@@ -73,7 +73,7 @@ func castToDateType(dateString string) (dateType, error) {
 		splittedTime := strings.Split(datetimeSplitted[1], ":")
 
 		if len(splittedTime) != 3 {
-			return dateType{}, fmt.Errorf("datepart: %s is incorrect format (yyyy-mm-dd hh:mm:ss or yyyy-mm-dd)", dateString)
+			return dateType{}, fmt.Errorf("cast data type: %s is incorrect format (yyyy-mm-dd hh:mm:ss or yyyy-mm-dd)", dateString)
 		}
 		hour, err = strconv.Atoi(splittedTime[0])
 		if err != nil {
