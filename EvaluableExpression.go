@@ -3,8 +3,6 @@ package govaluate
 import (
 	"errors"
 	"fmt"
-	"math"
-	"strconv"
 )
 
 const isoDateFormat string = "2006-01-02T15:04:05.999999999Z0700"
@@ -46,68 +44,11 @@ Returns an error if the given expression has invalid syntax.
 func NewEvaluableExpression(expression string) (*EvaluableExpression, error) {
 
 	functions := map[string]ExpressionFunction{
-		"min": func(args ...interface{}) (result interface{}, err error) {
-			if len(args) == 0 {
-				return "", fmt.Errorf("Cannot find minimum of empty list")
-			}
-			result = math.Inf(0)
-			for _, arg := range args {
-				value := result.(float64)
-				switch arg.(type) {
-				case string:
-					value, err = strconv.ParseFloat(arg.(string), 64)
-					if err != nil {
-						return "", err
-					}
-				case float64:
-					value = arg.(float64)
-				case float32:
-					value = float64(arg.(float32))
-				case int:
-					value = float64(arg.(int))
-				case int32:
-					value = float64(arg.(int32))
-				case int64:
-					value = float64(arg.(int64))
-				default:
-					return "", fmt.Errorf("Wrong argument type to minimum function")
-				}
-
-				result = math.Min(result.(float64), value)
-			}
-			return result, nil
-		},
-		"max": func(args ...interface{}) (result interface{}, err error) {
-			if len(args) == 0 {
-				return "", fmt.Errorf("Cannot find minimum of empty list")
-			}
-			result = math.Inf(-1)
-			for _, arg := range args {
-				value := result.(float64)
-				switch arg.(type) {
-				case string:
-					value, err = strconv.ParseFloat(arg.(string), 64)
-					if err != nil {
-						return "", err
-					}
-				case float64:
-					value = arg.(float64)
-				case float32:
-					value = float64(arg.(float32))
-				case int:
-					value = float64(arg.(int))
-				case int32:
-					value = float64(arg.(int32))
-				case int64:
-					value = float64(arg.(int64))
-				default:
-					return "", fmt.Errorf("Wrong argument type to minimum function")
-				}
-
-				result = math.Max(result.(float64), value)
-			}
-			return result, nil
-		},
+		"min":      minCustomFunction,
+		"max":      maxCustomFunction,
+		"datediff": dateDiffFunction,
+		"dateadd":  dateAddFunction,
+		"datepart": datePartFunction,
 	}
 	return NewEvaluableExpressionWithFunctions(expression, functions)
 }
