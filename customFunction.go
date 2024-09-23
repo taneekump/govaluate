@@ -229,20 +229,22 @@ var dateDiffFunction = func(args ...interface{}) (result interface{}, err error)
 	minDate := date1
 
 	valueInt := 0
-	if mode == "\"y\"" {
+	if mode == "\"y\"" || mode == "y" {
 		valueInt = maxDate.year - minDate.year
 		if maxDate.month < minDate.month || (maxDate.month == minDate.month && maxDate.day < minDate.day) {
 			valueInt--
 		}
-	} else if mode == "\"m\"" {
+	} else if mode == "\"m\"" || mode == "m" {
 		valueInt = ((maxDate.year - minDate.year) * 12) + (maxDate.month - minDate.month)
 		if maxDate.day < minDate.day {
 			valueInt--
 		}
-	} else {
+	} else if mode == "\"d\"" || mode == "d" {
 		maxEpoch := time.Date(maxDate.year, time.Month(maxDate.month), maxDate.day, 0, 0, 0, 0, time.UTC)
 		minEpoch2 := time.Date(minDate.year, time.Month(minDate.month), minDate.day, 0, 0, 0, 0, time.UTC)
 		valueInt = int(maxEpoch.Sub(minEpoch2).Hours() / 24)
+	} else {
+		return "", fmt.Errorf("Unrecognized mode: %v", mode)
 	}
 	result = float64(valueInt)
 	return result, nil
@@ -295,12 +297,14 @@ var dateAddFunction = func(args ...interface{}) (result interface{}, err error) 
 	monthOffset := 0
 	dayOffSet := 0
 	// calculate
-	if mode == "\"y\"" {
+	if mode == "\"y\"" || mode == "y" {
 		yearOffset = offsetInt
-	} else if mode == "\"m\"" {
+	} else if mode == "\"m\"" || mode == "m" {
 		monthOffset = offsetInt
-	} else {
+	} else if mode == "\"d\"" || mode == "d" {
 		dayOffSet = offsetInt
+	} else {
+		return "", fmt.Errorf("Unrecognized mode: %v", mode)
 	}
 	// must check, if day exceed capability of month
 	epoch := time.Date(
